@@ -12,6 +12,14 @@ public class File {
     public File() {
     }
 
+    public File(String filename, String contenttype, String filesize, Integer userId, byte[] filedata) {
+        this.filename = filename;
+        this.contenttype = contenttype;
+        this.filesize = filesize;
+        this.userId = userId;
+        this.filedata = filedata;
+    }
+
     public Integer getFileId() {
         return fileId;
     }
