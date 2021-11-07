@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 @Service
 public class FileService {
@@ -39,5 +40,9 @@ public class FileService {
         byte[] dataOfFile = fis.readAllBytes();
         File fileToStore = new File(nameOfFile, typeOfContent,sizeOfFile, idOfUser, dataOfFile);
         return fileMapper.insert(fileToStore);
+    }
+
+    public List<File> getAllFiles(){
+        return fileMapper.getFiles();
     }
 }
