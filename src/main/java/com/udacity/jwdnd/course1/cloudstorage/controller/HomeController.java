@@ -29,7 +29,7 @@ public class HomeController {
     public String uploadFile(@RequestParam("fileUpload") MultipartFile file, Model model, Authentication authentication) throws IOException {
         this.fileService.storeFile(file, authentication);
         List<File> fileList = this.fileService.getAllFiles();
-        model.addAttribute("", fileList);
+        model.addAttribute("files", fileList);
         return "file";
     }
 }
