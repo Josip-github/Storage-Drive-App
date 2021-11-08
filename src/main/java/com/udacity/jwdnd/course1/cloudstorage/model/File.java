@@ -9,8 +9,6 @@ public class File {
     private Integer userId;
     private byte[] filedata;
 
-    public File() {
-    }
 
     public File(String filename, String contenttype, String filesize, Integer userId, byte[] filedata) {
         this.filename = filename;
