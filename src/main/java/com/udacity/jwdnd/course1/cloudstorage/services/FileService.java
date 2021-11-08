@@ -33,4 +33,8 @@ public class FileService {
     public List<File> getAllFilesFromThisUser(Integer id){
         return this.fileMapper.getFilesFromThisUser(id);
     }
+
+    public void deleteFile(Integer fileId){
+        this.fileMapper.deleteFile(fileId);
+    }
 }
