@@ -17,11 +17,9 @@ import java.util.List;
 public class FileService {
 
     private FileMapper fileMapper;
-    private UserMapper userMapper;
 
-    public FileService(FileMapper fileMapper, UserMapper userMapper) {
+    public FileService(FileMapper fileMapper) {
         this.fileMapper = fileMapper;
-        this.userMapper = userMapper;
     }
 
     @PostConstruct
@@ -29,7 +27,7 @@ public class FileService {
         System.out.println("Creating FileService bean.");
     }
 
-    public int storeFile(MultipartFile file, Authentication authentication) throws IOException {
+    /*public int storeFile(MultipartFile file, Authentication authentication) throws IOException {
         InputStream fis = file.getInputStream();
         String nameOfFile = file.getOriginalFilename();
         String typeOfContent = file.getContentType();
@@ -40,9 +38,18 @@ public class FileService {
         byte[] dataOfFile = fis.readAllBytes();
         File fileToStore = new File(nameOfFile, typeOfContent,sizeOfFile, idOfUser, dataOfFile);
         return fileMapper.insert(fileToStore);
+    }*/
+
+    public void insert(File file){
+        fileMapper.insert(file);
     }
 
-    public List<File> getAllFiles(){
-        return fileMapper.getFiles();
+    public boolean isFilenameAvailable(String filename, Integer userId){
+        return this.fileMapper.getFile(filename, userId) == null;
+
+    }
+
+    public List<File> getAllFilesFromThisUser(Integer id){
+        return this.fileMapper.getFilesFromThisUser(id);
     }
 }
