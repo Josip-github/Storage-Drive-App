@@ -9,16 +9,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.security.Principal;
 import java.util.List;
 
 @Controller
-//@RequestMapping("/home")
 public class HomeController {
 
     private FileService fileService;
@@ -69,34 +65,4 @@ public class HomeController {
 
     }
 
-
-
-    /*@PostMapping("/uploadFile")
-    public String uploadFile(@RequestParam("fileUpload") MultipartFile file, Model model, Authentication authentication) throws IOException {
-        this.fileService.storeFile(file, authentication);
-        List<File> fileList = this.fileService.getAllFiles();
-        model.addAttribute("files", fileList);
-        return "home";
-    }
-
-    @PostMapping("/file-upload")
-    public String postFile(@RequestParam("fileUpload") MultipartFile fileUpload, Principal principal, Model model) throws IOException {
-
-        if(fileUpload.isEmpty()){
-            model.addAttribute("success", false);
-            model.addAttribute("message", "No file selected to upload!");
-            return "result";
-        }
-
-        File file = new File();
-        file.setFiledata(fileUpload.getBytes());
-        file.setUserId(this.userService.getUser(principal.getName()).getUserId());
-        file.setFilesize(String.valueOf(fileUpload.getSize()));
-        file.setFilename(fileUpload.getOriginalFilename());
-        file.setContenttype(fileUpload.getContentType());
-        fileService.insert(file);
-        model.addAttribute("success", true);
-        model.addAttribute("message", "New file added successfully!");
-        return "result";
-    }*/
 }
