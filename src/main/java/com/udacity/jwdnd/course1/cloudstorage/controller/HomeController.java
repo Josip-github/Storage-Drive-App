@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -63,6 +64,24 @@ public class HomeController {
         }
         return "result";
 
+    }
+
+    @GetMapping("/file-delete/{fileId}")
+    public String deleteFile(@PathVariable Integer fileId, Authentication authentication, Model model){
+        User user = userService.getUser(authentication.getPrincipal().toString());
+
+        model.addAttribute("successMessage", false);
+        model.addAttribute("errorMessage", false);
+
+        try{
+            fileService.deleteFile(fileId);
+            List<File> files = fileService.getAllFilesFromThisUser(user.getUserId());
+            model.addAttribute("successMessage", "File is deleted successfully!");
+        } catch (Exception e){
+            e.printStackTrace();
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+        return "result";
     }
 
 }
