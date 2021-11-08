@@ -90,7 +90,7 @@ public class HomeController {
     }
 
     @GetMapping("/file-view/{fileId}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable Integer fileId, Authentication authentication){
+    public ResponseEntity<Resource> downloadFile(@PathVariable Integer fileId){
         File file = fileService.getFileById(fileId);
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(file.getContenttype()))
