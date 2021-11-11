@@ -14,8 +14,8 @@ import java.util.List;
 @Controller
 public class NoteController {
 
-    private NoteService noteService;
-    private UserService userService;
+    private final NoteService noteService;
+    private final UserService userService;
 
     public NoteController(NoteService noteService, UserService userService) {
         this.noteService = noteService;
@@ -28,28 +28,36 @@ public class NoteController {
     }
 
     @PostMapping("/add-note")
-    public String addNewNote(@ModelAttribute(value = "newNote") Note note, Model model, Authentication authentication){
+    public String addNewNoteOrUpdate(@ModelAttribute(value = "newNote") Note note, Model model, Authentication authentication){
         User user = userService.getUser(authentication.getPrincipal().toString());
         model.addAttribute("errorMessage", false);
         model.addAttribute("successMessage", false);
 
-        if(note.getNoteTitle().isEmpty() || note.getNoteDescription().isEmpty()){
-            model.addAttribute("errorMessage", "You can't leave title or description empty, " +
-                    "\n please type in some text");
-            return "result";
+        if(note.getNoteId() != null){
+            try {
+                noteService.updateNote(note);
+                List<Note> notes = noteService.getAllNotesFromThisUser(user.getUserId());
+                model.addAttribute("notes", notes);
+                model.addAttribute("successMessage", "Your note was edited succesfully.");
+                return "result";
+            } catch (Exception e){
+                model.addAttribute("errorMessage", "Something went wrong with the editing. Please try one more time.");
+                return "result";
+            }
+        } else {
+            try {
+                Note newNote = new Note(note.getNoteTitle(), note.getNoteDescription(), user.getUserId());
+                noteService.createNewNote(newNote);
+                List<Note> notes = noteService.getAllNotesFromThisUser(user.getUserId());
+                model.addAttribute("notes", notes);
+                model.addAttribute("successMessage", "The note added successfully!");
+                return "result";
+            } catch (Exception e){
+                //e.printStackTrace();
+                model.addAttribute("errorMessage", "Something went wrong with adding the note... Please try again!");
+                return "result";
+            }
         }
-
-        try{
-            Note newNote = new Note(note.getNoteTitle(), note.getNoteDescription(), user.getUserId());
-            noteService.createNewNote(newNote);
-            List<Note> notes = noteService.getAllNotesFromThisUser(user.getUserId());
-            model.addAttribute("notes", notes);
-            model.addAttribute("successMessage", "The note added successfully!");
-        } catch(Exception e){
-            e.printStackTrace();
-            model.addAttribute("errorMessage", e.getMessage());
-        }
-        return "result";
     }
 
     @GetMapping("/note-delete/{noteId}")
