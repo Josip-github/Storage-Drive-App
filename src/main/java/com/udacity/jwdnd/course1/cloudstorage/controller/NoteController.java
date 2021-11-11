@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 
 import java.util.List;
 
@@ -23,15 +24,33 @@ public class NoteController {
         this.userService = userService;
     }
 
-
+    @ModelAttribute("note")
+    public Note getNote(){
+        return new Note();
+    }
 
     @PostMapping("/add-note")
-    public String addNewNote(@ModelAttribute("note") Note note, Model model, Authentication authentication){
+    public String addNewNote(@ModelAttribute(value = "newNote") Note note, Model model, Authentication authentication){
         User user = userService.getUser(authentication.getPrincipal().toString());
-        Note newNote = new Note(note.getNoteTitle(), note.getNoteDescription(), user.getUserId());
-        noteService.createNewNote(newNote);
-        List<Note> notes = noteService.getAllNotesFromThisUser(user.getUserId());
-        model.addAttribute("notes", notes);
-        return "home";
+        model.addAttribute("errorMessage", false);
+        model.addAttribute("successMessage", false);
+
+        if(note.getNoteTitle().isEmpty() || note.getNoteDescription().isEmpty()){
+            model.addAttribute("errorMessage", "You can't leave title or description empty, " +
+                    "\n please type in some text");
+            return "result";
+        }
+
+        try{
+            Note newNote = new Note(note.getNoteTitle(), note.getNoteDescription(), user.getUserId());
+            noteService.createNewNote(newNote);
+            List<Note> notes = noteService.getAllNotesFromThisUser(user.getUserId());
+            model.addAttribute("notes", notes);
+            model.addAttribute("successMessage", "The note added successfully!");
+        } catch(Exception e){
+            e.printStackTrace();
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+        return "result";
     }
 }

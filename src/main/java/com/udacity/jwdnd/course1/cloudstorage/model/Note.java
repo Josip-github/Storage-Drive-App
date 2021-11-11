@@ -8,6 +8,8 @@ public class Note {
     private Integer userId;
 
     public Note() {
+        this.noteTitle = "";
+        this.noteDescription = "";
     }
 
     public Note(String noteTitle, String noteDescription, Integer userId) {

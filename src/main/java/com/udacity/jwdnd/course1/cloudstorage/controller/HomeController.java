@@ -1,8 +1,10 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
+import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
+import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -25,10 +27,12 @@ public class HomeController {
 
     private FileService fileService;
     private UserService userService;
+    private NoteService noteService;
 
-    public HomeController(FileService fileService, UserService userService) {
+    public HomeController(FileService fileService, UserService userService, NoteService noteService) {
         this.fileService = fileService;
         this.userService = userService;
+        this.noteService = noteService;
     }
 
     @GetMapping("/home")
@@ -36,6 +40,8 @@ public class HomeController {
         User user = userService.getUser(auth.getPrincipal().toString());
         Integer userId = user.getUserId();
         model.addAttribute("files", this.fileService.getAllFilesFromThisUser(userId));
+        model.addAttribute("notes", this.noteService.getAllNotesFromThisUser(userId));
+        model.addAttribute("newNote", new Note());
         return "home";
     }
 
