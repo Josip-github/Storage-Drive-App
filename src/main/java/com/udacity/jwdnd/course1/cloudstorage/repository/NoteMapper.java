@@ -18,4 +18,23 @@ public interface NoteMapper {
 
     @Delete("DELETE FROM NOTES WHERE noteid = #{noteId}")
     void deleteNote(Integer noteId);
+
+    @Update("UPDATE NOTES SET notetitle = #{noteTitle}, notedescription = #{noteDescription}, userid = #{userId}" +
+            " where noteid = #{noteId}")
+    Integer updateNote(Note note);
 }
+
+/*
+* CREATE TABLE IF NOT EXISTS NOTES (
+    noteid INT PRIMARY KEY auto_increment,
+    notetitle VARCHAR(20),
+    notedescription VARCHAR (1000),
+    userid INT,
+    foreign key (userid) references USERS(userid)
+);
+*
+* private Integer noteId;
+    private String noteTitle;
+    private String noteDescription;
+    private Integer userId;
+* */
