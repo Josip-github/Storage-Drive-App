@@ -102,7 +102,6 @@ public class HomeController {
                 .contentType(MediaType.parseMediaType(file.getContenttype()))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
                 .body(new ByteArrayResource(file.getFiledata()));
-
     }
 
 }
