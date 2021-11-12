@@ -18,7 +18,9 @@ public class CredentialService {
     }
 
     public void createNewCredential(Credential credential){
-        credentialMapper.insert(credential);
+        credential.setKey(this.encryptionService.generateKey());
+        credential.setPassword(this.encryptPassword(credential));
+        this.credentialMapper.insert(credential);
     }
 
     public List<Credential> getAllCredentialsFromThisUser(Integer userId){
