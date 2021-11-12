@@ -10,6 +10,10 @@ public class Credential {
     private Integer userId;
 
     public Credential() {
+        this.url ="";
+        this.username= "";
+        this.key="";
+        this.password ="";
     }
 
     public Credential(String url, String username, String key, String password, Integer userId) {
