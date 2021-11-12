@@ -28,7 +28,7 @@ public class NoteController {
     }
 
     @PostMapping("/add-note")
-    public String addNewNoteOrUpdate(@ModelAttribute(value = "newNote") Note note, Model model, Authentication authentication){
+    public String addNewNoteOrUpdate(@ModelAttribute("newNote") Note note, Model model, Authentication authentication){
         User user = userService.getUser(authentication.getPrincipal().toString());
         note.setUserId(user.getUserId());
 
