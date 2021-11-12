@@ -10,9 +10,11 @@ import java.util.List;
 public class CredentialService {
 
     private CredentialMapper credentialMapper;
+    private EncryptionService encryptionService;
 
-    public CredentialService(CredentialMapper credentialMapper) {
+    public CredentialService(CredentialMapper credentialMapper, EncryptionService encryptionService) {
         this.credentialMapper = credentialMapper;
+        this.encryptionService = encryptionService;
     }
 
     public void createNewCredential(Credential credential){
@@ -22,4 +24,13 @@ public class CredentialService {
     public List<Credential> getAllCredentialsFromThisUser(Integer userId){
         return credentialMapper.getCredentialsFromThisUser(userId);
     }
+
+    public String encryptPassword(Credential credential){
+        return this.encryptionService.encryptValue(credential.getPassword(), credential.getKey());
+    }
+
+    public String decryptPassword(Credential credential){
+        return this.encryptionService.decryptValue(credential.getPassword(), credential.getKey());
+    }
+
 }
