@@ -29,6 +29,7 @@ public class CredentialController {
     @PostMapping("/add-credential")
     public String addNewCredential(Credential credential, Authentication authentication, Model model){
         User user = userService.getUser(authentication.getPrincipal().toString());
+        credential.setUserId(user.getUserId());
 
         try {
             credentialService.createNewCredential(credential);
