@@ -146,14 +146,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
+                                <tr th:each="credential : ${credentials}">
                                     <td>
                                         <button type="button" class="btn btn-success">Edit</button>
                                         <a class="btn btn-danger">Delete</a>
                                     </td>
-                                    <th scope="row">Example Credential URL</th>
-                                    <td>Example Credential Username</td>
-                                    <td>Example Credential Password</td>
+                                    <th scope="row" th:text="*{url}">Example Credential URL</th>
+                                    <td th:text="*{username}">Example Credential Username</td>
+                                    <td th:text="*{password}">Example Credential Password</td>
                                 </tr>
                                 </tbody>
                             </table>
