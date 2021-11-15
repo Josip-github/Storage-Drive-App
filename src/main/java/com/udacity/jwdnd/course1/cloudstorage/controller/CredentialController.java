@@ -27,16 +27,28 @@ public class CredentialController {
     }
 
     @PostMapping("/add-credential")
-    public String addNewCredential(Credential credential, Authentication authentication, Model model){
+    public String addNewCredentialOrUpdate(Credential credential, Authentication authentication, Model model){
         User user = userService.getUser(authentication.getPrincipal().toString());
         credential.setUserId(user.getUserId());
 
-        try {
-            credentialService.createNewCredential(credential);
-            model.addAttribute("successMessage", "The credential added successfully!");
-        } catch (Exception e) {
-            model.addAttribute("errorMessage", "There was something wrong with adding credential. Please try again.");
+        if(credential.getCredentialId() != null){
+            try{
+                //credentialService.updateCredential()
+                model.addAttribute("successMessaage", "The credential was updated successfully!");
+                return "result";
+            } catch (Exception e){
+                model.addAttribute("errorMessage", "There was an error with updating the credential... Please try again.");
+                return "result";
+            }
+        } else {
+            try {
+                credentialService.createNewCredential(credential);
+                model.addAttribute("successMessage", "The credential added successfully!");
+                return "result";
+            } catch (Exception e) {
+                model.addAttribute("errorMessage", "There was something wrong with adding credential. Please try again.");
+                return "result";
+            }
         }
-        return "result";
     }
 }
