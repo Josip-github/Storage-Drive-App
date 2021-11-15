@@ -16,9 +16,11 @@ public interface CredentialMapper {
     @Options(useGeneratedKeys = true, keyProperty = "credentialId")
     Integer insert(Credential credential);
 
-    @Update("UPDATE CREDENTIALS SET url = #{url}, username = #{username}, password = #{pasword} " +
-            "WHERE credentialid = #{credentialId}")
+    @Update("UPDATE CREDENTIALS SET url = #{url}, username = #{username}, password = #{password} WHERE credentialid = #{credentialId}")
     Integer updateCredential(Credential credential);
+
+    @Select("SELECT key FROM CREDENTIALS WHERE credentialid = #{credentialId}")
+    String retrieveKeyByCredentialId(Integer credentialId);
 
 
 }

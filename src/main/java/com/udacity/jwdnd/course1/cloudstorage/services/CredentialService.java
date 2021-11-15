@@ -24,6 +24,9 @@ public class CredentialService {
     }
 
     public void updateCredential(Credential credential){
+        String key = this.credentialMapper.retrieveKeyByCredentialId(credential.getCredentialId());
+        String encodedPassword = this.encryptionService.encryptValue(credential.getPassword(), key);
+        credential.setPassword(encodedPassword);
         this.credentialMapper.updateCredential(credential);
     }
 
