@@ -42,4 +42,8 @@ public class CredentialService {
         return this.encryptionService.decryptValue(credential.getPassword(), credential.getKey());
     }
 
+    public void deleteCredential(Integer id){
+        this.credentialMapper.deleteCredential(id);
+    }
+
 }
