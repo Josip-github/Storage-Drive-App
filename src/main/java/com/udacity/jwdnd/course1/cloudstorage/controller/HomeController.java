@@ -49,6 +49,8 @@ public class HomeController {
         model.addAttribute("newCredential", new Credential());
         model.addAttribute("newNote", new Note());
 
+        model.addAttribute("credentialService", credentialService);
+
         return "home";
     }
 

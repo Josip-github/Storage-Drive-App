@@ -23,8 +23,8 @@ public class CredentialService {
         this.credentialMapper.insert(credential);
     }
 
-    public void updateCredential(){
-        //this.credentialMapper.updateNote();
+    public void updateCredential(Credential credential){
+        this.credentialMapper.updateCredential(credential);
     }
 
     public List<Credential> getAllCredentialsFromThisUser(Integer userId){
