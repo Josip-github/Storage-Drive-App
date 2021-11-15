@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -53,8 +54,19 @@ public class CredentialController {
         }
     }
 
-    @GetMapping()
-    public String deleteCredential(){
+    @GetMapping("/delete-credential/{credentialId}")
+    public String deleteCredential(@PathVariable Integer credentialId, Authentication authentication, Model model){
+        User user = userService.getUser(authentication.getPrincipal().toString());
+        model.addAttribute("successMessage", false);
+        model.addAttribute("errorMessage", false);
+
+        try {
+            credentialService.deleteCredential(credentialId);
+            credentialService.getAllCredentialsFromThisUser(user.getUserId());
+            model.addAttribute("successMessage", "You've successfully deleted the credential.");
+        } catch (Exception e){
+            model.addAttribute("errorMessage", "There was an error with deleting the credential... Please try again.");
+        }
         return "result";
     }
 }
