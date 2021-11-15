@@ -33,7 +33,7 @@ public class CredentialController {
 
         if(credential.getCredentialId() != null){
             try{
-                //credentialService.updateCredential()
+                credentialService.updateCredential(credential);
                 model.addAttribute("successMessaage", "The credential was updated successfully!");
                 return "result";
             } catch (Exception e){
