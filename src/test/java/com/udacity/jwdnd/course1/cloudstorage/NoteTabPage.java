@@ -8,6 +8,9 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class NoteTabPage {
 
     @FindBy(id = "nav-notes-tab")
@@ -31,6 +34,12 @@ public class NoteTabPage {
     @FindBy(id = "note-modal-submit")
     private WebElement saveChangesButton;
 
+    @FindBy(id = "notetitle")
+    private List<WebElement> titleList;
+
+    @FindBy(id = "notedescription")
+    private List<WebElement> descriptionList;
+
     public NoteTabPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
@@ -50,6 +59,19 @@ public class NoteTabPage {
         wait.until(ExpectedConditions.elementToBeClickable(titleInputField)).sendKeys(title);
         wait.until(ExpectedConditions.elementToBeClickable(descriptionInputField)).sendKeys(description);
         wait.until(ExpectedConditions.elementToBeClickable(this.saveChangesButton)).click();
+    }
 
+    public List<String> getListOfNoteElements(WebDriver driver){
+        WebDriverWait wait = new WebDriverWait(driver, 7);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        wait.until(ExpectedConditions.elementToBeClickable(navNoteTab)).click();
+        navNoteTab.click();
+        wait.until(ExpectedConditions.elementToBeClickable(addButton));
+        List<String> listOfNoteElements = new ArrayList<>(List.of(titleList.get(0).getText(), descriptionList.get(0).getText()));
+        return listOfNoteElements;
     }
 }

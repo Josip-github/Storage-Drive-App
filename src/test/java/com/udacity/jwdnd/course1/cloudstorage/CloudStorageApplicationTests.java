@@ -9,6 +9,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -104,6 +106,12 @@ class CloudStorageApplicationTests {
 		WebElement noteTab = driver.findElement(By.id("nav-notes-tab"));
 		noteTab.click();
 		noteTabPage.addNewNoteAction(driver,"Title1", "Description1", noteTab);
+
+		driver.get(baseURL + "/home");
+
+		List<String> listOfNoteElements = noteTabPage.getListOfNoteElements(driver);
+		assertEquals("Title1", listOfNoteElements.get(0));
+		assertEquals("Description1", listOfNoteElements.get(1));
 	}
 
 
