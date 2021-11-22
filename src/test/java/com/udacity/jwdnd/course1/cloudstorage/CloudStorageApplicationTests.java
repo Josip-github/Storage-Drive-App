@@ -7,6 +7,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CloudStorageApplicationTests {
 
@@ -15,6 +17,11 @@ class CloudStorageApplicationTests {
 
 	private static WebDriver driver;
 	private String baseURL;
+
+	private String firstname = "Anakin";
+	private String lastname = "Skywalker";
+	private String username = "Darth Vader";
+	private String password = "Sith";
 
 	private SignupPage signupPage;
 	private LoginPage loginPage;
@@ -47,5 +54,27 @@ class CloudStorageApplicationTests {
 		Assertions.assertEquals("Login", driver.getTitle());
 	}
 
+	@Test
+	public void testValidLoginAndLogout(){
+		driver.get(baseURL + "/signup");
+		assertEquals("Sign Up", driver.getTitle());
+
+		signupPage.signupAction(firstname, lastname, username, password);
+
+		driver.get(baseURL + "/login");
+		assertEquals("Login", driver.getTitle());
+
+		loginPage.loginAction(username, password);
+
+		driver.get(baseURL + "/home");
+		assertEquals("Home", driver.getTitle());
+
+		homePage.logoutAction();
+		assertEquals(baseURL + "/login", driver.getCurrentUrl());
+
+		driver.get(baseURL + "/home");
+		assertNotEquals("Home", driver.getTitle());
+
+	}
 
 }
