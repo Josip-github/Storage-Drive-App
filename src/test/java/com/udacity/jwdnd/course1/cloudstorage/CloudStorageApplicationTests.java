@@ -2,7 +2,9 @@ package com.udacity.jwdnd.course1.cloudstorage;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -87,5 +89,20 @@ class CloudStorageApplicationTests {
 		driver.get(baseURL + "/home");
 		assertNotEquals("Home", driver.getTitle());
 	}
+
+	@Test
+	public void testCreatingAndDisplayingNote(){
+		driver.get(baseURL + "/signup");
+		signupPage.signupAction(firstname, lastname, username, password);
+
+		driver.get(baseURL + "/login");
+		loginPage.loginAction(username, password);
+
+		driver.get(baseURL + "/home");
+		WebElement noteTab = driver.findElement(By.id("nav-notes-tab"));
+		noteTab.click();
+	}
+
+
 
 }
