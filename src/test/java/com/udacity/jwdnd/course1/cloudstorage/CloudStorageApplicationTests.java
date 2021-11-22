@@ -21,7 +21,7 @@ class CloudStorageApplicationTests {
 	private HomePage homePage;
 
 	@BeforeAll
-	static void beforeAll() {
+	public static void beforeAll() {
 		WebDriverManager.chromedriver().setup();
 		driver = new ChromeDriver();
 	}
@@ -35,8 +35,8 @@ class CloudStorageApplicationTests {
 	}
 
 	@AfterAll
-	public void afterAll() {
-		if (this.driver != null) {
+	public static void afterAll() {
+		if (driver != null) {
 			driver.quit();
 		}
 	}
