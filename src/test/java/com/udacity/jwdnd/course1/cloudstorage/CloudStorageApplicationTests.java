@@ -13,20 +13,29 @@ class CloudStorageApplicationTests {
 	@LocalServerPort
 	private int port;
 
-	private WebDriver driver;
+	private static WebDriver driver;
+	private String baseURL;
+
+	private SignupPage signupPage;
+	private LoginPage loginPage;
+	private HomePage homePage;
 
 	@BeforeAll
 	static void beforeAll() {
 		WebDriverManager.chromedriver().setup();
+		driver = new ChromeDriver();
 	}
 
 	@BeforeEach
 	public void beforeEach() {
-		this.driver = new ChromeDriver();
+		this.baseURL = "http://localhost:" + port;
+		this.signupPage = new SignupPage(driver);
+		this.loginPage = new LoginPage(driver);
+		this.homePage = new HomePage(driver);
 	}
 
-	@AfterEach
-	public void afterEach() {
+	@AfterAll
+	public void afterAll() {
 		if (this.driver != null) {
 			driver.quit();
 		}
@@ -37,5 +46,6 @@ class CloudStorageApplicationTests {
 		driver.get("http://localhost:" + this.port + "/login");
 		Assertions.assertEquals("Login", driver.getTitle());
 	}
+
 
 }
