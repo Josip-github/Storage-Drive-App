@@ -51,11 +51,5 @@ public class NoteTabPage {
         wait.until(ExpectedConditions.elementToBeClickable(descriptionInputField)).sendKeys(description);
         wait.until(ExpectedConditions.elementToBeClickable(this.saveChangesButton)).click();
 
-
-
-
-        /*titleInputField.sendKeys(title);
-        descriptionInputField.sendKeys(description);
-        saveChangesButton.click();*/
     }
 }
