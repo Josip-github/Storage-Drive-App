@@ -74,7 +74,18 @@ class CloudStorageApplicationTests {
 
 		driver.get(baseURL + "/home");
 		assertNotEquals("Home", driver.getTitle());
+	}
 
+	@Test
+	public void testUnauthorizedAccess(){
+		driver.get(baseURL + "/signup");
+		assertEquals("Sign Up", driver.getTitle());
+
+		driver.get(baseURL + "/login");
+		assertEquals("Login", driver.getTitle());
+
+		driver.get(baseURL + "/home");
+		assertNotEquals("Home", driver.getTitle());
 	}
 
 }
