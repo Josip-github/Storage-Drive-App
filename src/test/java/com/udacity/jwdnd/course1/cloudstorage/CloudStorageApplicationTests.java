@@ -28,6 +28,7 @@ class CloudStorageApplicationTests {
 	private SignupPage signupPage;
 	private LoginPage loginPage;
 	private HomePage homePage;
+	private NoteTabPage noteTabPage;
 
 	@BeforeAll
 	public static void beforeAll() {
@@ -41,6 +42,7 @@ class CloudStorageApplicationTests {
 		this.signupPage = new SignupPage(driver);
 		this.loginPage = new LoginPage(driver);
 		this.homePage = new HomePage(driver);
+		this.noteTabPage = new NoteTabPage(driver);
 	}
 
 	@AfterAll
@@ -101,6 +103,7 @@ class CloudStorageApplicationTests {
 		driver.get(baseURL + "/home");
 		WebElement noteTab = driver.findElement(By.id("nav-notes-tab"));
 		noteTab.click();
+		noteTabPage.addNewNoteAction(driver,"Title1", "Description1", noteTab);
 	}
 
 
