@@ -127,6 +127,9 @@ class CloudStorageApplicationTests {
 		String usernameCredential = "udacityUser123";
 		String passwordCredential = "pass246!word";
 
+		/*driver.get(baseURL + "/signup");
+		signupPage.signupAction(firstname, lastname, username, password);*/
+
 		driver.get(baseURL + "/login");
 		assertEquals("Login", driver.getTitle());
 

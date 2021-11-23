@@ -24,7 +24,7 @@ public class CredentialTabPage {
     @FindBy(id = "credential-password") // home.html line 186
     private WebElement passwordInputField;
 
-    @FindBy(id = "credentialSubmit") // home.html line 188
+    @FindBy(id = "credential-modal-submit") // home.html line 193
     private WebElement saveChangesButton;
 
     public CredentialTabPage(WebDriver driver) {
