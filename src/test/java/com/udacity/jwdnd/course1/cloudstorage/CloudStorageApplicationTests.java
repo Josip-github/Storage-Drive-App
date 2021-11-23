@@ -6,8 +6,11 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
@@ -24,7 +27,7 @@ class CloudStorageApplicationTests {
 
 	private String firstname = "Anakin";
 	private String lastname = "Skywalker";
-	private String username = "Darth Vader";
+	private String username = "DarthVader";
 	private String password = "Sith";
 
 	private SignupPage signupPage;
@@ -55,12 +58,6 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	public void getLoginPage() {
-		driver.get("http://localhost:" + this.port + "/login");
-		Assertions.assertEquals("Login", driver.getTitle());
-	}
-
-	@Test
 	public void testValidLoginAndLogout(){
 		driver.get(baseURL + "/signup");
 		assertEquals("Sign Up", driver.getTitle());
@@ -83,35 +80,40 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	public void testUnauthorizedAccess(){
+	public void testNoteCRUDFunctions(){
+		WebDriverWait wait = new WebDriverWait(driver, 15);
+
 		driver.get(baseURL + "/signup");
-		assertEquals("Sign Up", driver.getTitle());
+		signupPage.signupAction(firstname, lastname, username, password); // driver signs up a user
 
 		driver.get(baseURL + "/login");
-		assertEquals("Login", driver.getTitle());
-
-		driver.get(baseURL + "/home");
-		assertNotEquals("Home", driver.getTitle());
-	}
-
-	@Test
-	public void testCreatingAndDisplayingNote(){
-		driver.get(baseURL + "/signup");
-		signupPage.signupAction(firstname, lastname, username, password);
-
-		driver.get(baseURL + "/login");
-		loginPage.loginAction(username, password);
+		loginPage.loginAction(username, password); // driver logs the user in
 
 		driver.get(baseURL + "/home");
 		WebElement noteTab = driver.findElement(By.id("nav-notes-tab"));
 		noteTab.click();
-		noteTabPage.addNewNoteAction(driver,"Title1", "Description1", noteTab);
+		noteTabPage.addNewNoteAction(driver,"Title1", "Description1", noteTab); // driver adds a new note
 
 		driver.get(baseURL + "/home");
+		assertEquals("Title1", noteTabPage.getListOfNoteElements(driver).get(0));
+		assertEquals("Description1", noteTabPage.getListOfNoteElements(driver).get(1));
 
-		List<String> listOfNoteElements = noteTabPage.getListOfNoteElements(driver);
-		assertEquals("Title1", listOfNoteElements.get(0));
-		assertEquals("Description1", listOfNoteElements.get(1));
+		driver.get(baseURL + "/home");
+		driver.findElement(By.id("nav-notes-tab")).click();
+		noteTabPage.editNoteAction(driver, "Title2", "Description2", noteTab); // driver edits the note
+
+		driver.get(baseURL + "/home");
+		List<String> updatedListOfNoteElements = noteTabPage.getListOfNoteElements(driver);
+		assertEquals("Title2", updatedListOfNoteElements.get(0));
+		assertEquals("Description2", updatedListOfNoteElements.get(1));
+
+		driver.get(baseURL + "/home");
+		driver.findElement(By.id("nav-notes-tab")).click();
+		noteTabPage.deleteNoteAction(driver, noteTab); // driver deletes the note
+
+		driver.get(baseURL + "/home");
+		wait.until(driver -> driver.findElement(By.id("nav-notes-tab"))).click();
+		assertEquals(0, this.noteTabPage.getSizeOfNoteList());
 	}
 
 

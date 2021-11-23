@@ -74,4 +74,41 @@ public class NoteTabPage {
         List<String> listOfNoteElements = new ArrayList<>(List.of(titleList.get(0).getText(), descriptionList.get(0).getText()));
         return listOfNoteElements;
     }
+
+    public void editNoteAction(WebDriver driver, String title, String description, WebElement nav){
+        WebDriverWait wait = new WebDriverWait(driver, 20);
+
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(navNoteTab)).click();
+        } catch (TimeoutException ex){
+            System.out.println("Timeout exception");
+            nav.click();
+            wait.until(ExpectedConditions.elementToBeClickable(navNoteTab)).click();
+        }
+
+        wait.until(ExpectedConditions.elementToBeClickable(editButton)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(titleInputField)).clear();
+        wait.until(ExpectedConditions.elementToBeClickable(titleInputField)).sendKeys(title);
+        wait.until(ExpectedConditions.elementToBeClickable(descriptionInputField)).clear();
+        wait.until(ExpectedConditions.elementToBeClickable(descriptionInputField)).sendKeys(description);
+        wait.until(ExpectedConditions.elementToBeClickable(this.saveChangesButton)).click();
+    }
+
+    public void deleteNoteAction(WebDriver driver, WebElement nav){
+        WebDriverWait wait = new WebDriverWait(driver, 20);
+
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(navNoteTab)).click();
+        } catch (TimeoutException ex){
+            System.out.println("Timeout exception");
+            nav.click();
+            wait.until(ExpectedConditions.elementToBeClickable(navNoteTab)).click();
+        }
+
+        wait.until(ExpectedConditions.elementToBeClickable(deleteButton)).click();
+    }
+
+    public int getSizeOfNoteList(){
+        return this.titleList.size();
+    }
 }
