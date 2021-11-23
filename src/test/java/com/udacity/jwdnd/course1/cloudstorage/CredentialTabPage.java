@@ -7,6 +7,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CredentialTabPage {
@@ -35,6 +36,9 @@ public class CredentialTabPage {
     @FindBy(id = "credential-password")
     private List<WebElement> passwordList;
 
+    @FindBy(id = "credential-username")
+    private List<WebElement> usernameList;
+
     public CredentialTabPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
@@ -56,5 +60,20 @@ public class CredentialTabPage {
 
     public List<WebElement> getPasswordList(){
         return this.passwordList;
+    }
+
+    public List<WebElement> getUsernameList(){
+        return this.usernameList;
+    }
+
+    public List<String> getAttributesOfCredentialInstance(WebDriver driver, int index){
+        WebDriverWait wait = new WebDriverWait(driver, 20);
+        wait.until(ExpectedConditions.elementToBeClickable(navCredentialTab));
+        wait.until(ExpectedConditions.visibilityOf(addNewCredButton));
+        List<String> attributesOfCredInstance = new ArrayList<>
+                (List.of(urlList.get(index).getText(),
+                        usernameList.get(index).getText(),
+                        passwordList.get(index).getText()));
+        return attributesOfCredInstance;
     }
 }

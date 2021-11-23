@@ -136,14 +136,24 @@ class CloudStorageApplicationTests {
 		loginPage.loginAction(username, password);
 		driver.get(baseURL + "/home");
 		WebDriverWait wait = new WebDriverWait(driver, 30);
-		wait.until(driver -> driver.findElement(By.id("nav-notes-tab"))).click();
+		wait.until(driver -> driver.findElement(By.id("nav-credentials-tab"))).click();
 		int sizeOfUrlList = this.credentialTabPage.getUrlList().size();
+		int sizeOfUsernameList = this.credentialTabPage.getUsernameList().size();
+		int sizeOfPasswordList = this.credentialTabPage.getPasswordList().size();
 		this.credentialTabPage.addNewCredentialAction(driver, url, usernameCredential, passwordCredential);
 
 		driver.get(baseURL + "/home");
-		wait.until(driver -> driver.findElement(By.id("nav-notes-tab"))).click();
+		wait.until(driver -> driver.findElement(By.id("nav-credentials-tab"))).click();
 		assertEquals(sizeOfUrlList + 1, this.credentialTabPage.getUrlList().size());
-		assertNotEquals(passwordCredential, this.credentialTabPage.getPasswordList().get(1));
+		assertEquals(sizeOfUsernameList + 1, this.credentialTabPage.getUsernameList().size());
+		assertEquals(sizeOfPasswordList + 1, this.credentialTabPage.getPasswordList().size());
+
+		driver.get(baseURL + "/home");
+		wait.until(driver -> driver.findElement(By.id("nav-credentials-tab"))).click();
+		List<String> detailsOfCredential = credentialTabPage.getAttributesOfCredentialInstance(driver, 0);
+		assertEquals(url, detailsOfCredential.get(0));
+		assertEquals(usernameCredential, detailsOfCredential.get(1));
+		assertNotEquals(passwordCredential, detailsOfCredential.get(2));
 
 	}
 
