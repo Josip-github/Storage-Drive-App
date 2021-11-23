@@ -127,8 +127,8 @@ class CloudStorageApplicationTests {
 		String usernameCredential = "udacityUser123";
 		String passwordCredential = "pass246!word";
 
-		/*driver.get(baseURL + "/signup");
-		signupPage.signupAction(firstname, lastname, username, password);*/
+		driver.get(baseURL + "/signup");
+		signupPage.signupAction(firstname, lastname, username, password);
 
 		driver.get(baseURL + "/login");
 		assertEquals("Login", driver.getTitle());
@@ -137,7 +137,13 @@ class CloudStorageApplicationTests {
 		driver.get(baseURL + "/home");
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(driver -> driver.findElement(By.id("nav-notes-tab"))).click();
+		int sizeOfUrlList = this.credentialTabPage.getUrlList().size();
 		this.credentialTabPage.addNewCredentialAction(driver, url, usernameCredential, passwordCredential);
+
+		driver.get(baseURL + "/home");
+		wait.until(driver -> driver.findElement(By.id("nav-notes-tab"))).click();
+		assertEquals(sizeOfUrlList + 1, this.credentialTabPage.getUrlList().size());
+
 
 	}
 

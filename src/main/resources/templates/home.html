@@ -153,7 +153,7 @@
                                             Edit</button>
                                         <a class="btn btn-danger" th:href="@{/delete-credential/{credentialId} (credentialId = ${credential.credentialId})}">Delete</a>
                                     </td>
-                                    <th scope="row" th:text="${credential.url}">Example Credential URL</th>
+                                    <th scope="row" id="credential-url" th:text="${credential.url}">Example Credential URL</th>
                                     <td th:text="${credential.username}">Example Credential Username</td>
                                     <td th:text="${credential.password}">Example Credential Password</td>
                                 </tr>

@@ -7,6 +7,8 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
+
 public class CredentialTabPage {
 
     @FindBy(id = "nav-credentials-tab") // home.html line 23
@@ -27,6 +29,9 @@ public class CredentialTabPage {
     @FindBy(id = "credential-modal-submit") // home.html line 193
     private WebElement saveChangesButton;
 
+    @FindBy(id = "credential-url")
+    private List<WebElement> urlList;
+
     public CredentialTabPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
@@ -40,5 +45,9 @@ public class CredentialTabPage {
         wait.until(ExpectedConditions.elementToBeClickable(usernameInputField)).sendKeys(username);
         wait.until(ExpectedConditions.elementToBeClickable(passwordInputField)).sendKeys(password);
         wait.until(ExpectedConditions.elementToBeClickable(saveChangesButton)).click();
+    }
+
+    public List<WebElement> getUrlList(){
+        return this.urlList;
     }
 }
