@@ -4,6 +4,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CredentialTabPage {
 
@@ -29,5 +31,14 @@ public class CredentialTabPage {
         PageFactory.initElements(driver, this);
     }
 
+    public void addNewCredentialAction(WebDriver driver, String url, String username, String password){
+        WebDriverWait wait = new WebDriverWait(driver, 30);
 
+        wait.until(ExpectedConditions.elementToBeClickable(navCredentialTab)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(addNewCredButton)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(urlInputField)).sendKeys(url);
+        wait.until(ExpectedConditions.elementToBeClickable(usernameInputField)).sendKeys(username);
+        wait.until(ExpectedConditions.elementToBeClickable(passwordInputField)).sendKeys(password);
+        wait.until(ExpectedConditions.elementToBeClickable(saveChangesButton)).click();
+    }
 }

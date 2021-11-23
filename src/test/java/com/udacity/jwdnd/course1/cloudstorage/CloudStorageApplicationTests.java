@@ -34,6 +34,7 @@ class CloudStorageApplicationTests {
 	private LoginPage loginPage;
 	private HomePage homePage;
 	private NoteTabPage noteTabPage;
+	private CredentialTabPage credentialTabPage;
 
 	@BeforeAll
 	public static void beforeAll() {
@@ -48,6 +49,7 @@ class CloudStorageApplicationTests {
 		this.loginPage = new LoginPage(driver);
 		this.homePage = new HomePage(driver);
 		this.noteTabPage = new NoteTabPage(driver);
+		this.credentialTabPage = new CredentialTabPage(driver);
 	}
 
 	@AfterAll
@@ -58,6 +60,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
+	@Order(1)
 	public void testValidLoginAndLogout(){
 		driver.get(baseURL + "/signup");
 		assertEquals("Sign Up", driver.getTitle());
@@ -80,6 +83,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
+	@Order(2)
 	public void testNoteCRUDFunctions(){
 		WebDriverWait wait = new WebDriverWait(driver, 15);
 
@@ -114,6 +118,24 @@ class CloudStorageApplicationTests {
 		driver.get(baseURL + "/home");
 		wait.until(driver -> driver.findElement(By.id("nav-notes-tab"))).click();
 		assertEquals(0, this.noteTabPage.getSizeOfNoteList());
+	}
+
+	@Test
+	@Order(3)
+	public void testCredentialCRUDFunctions(){
+		String url = "udacity.com";
+		String usernameCredential = "udacityUser123";
+		String passwordCredential = "pass246!word";
+
+		driver.get(baseURL + "/login");
+		assertEquals("Login", driver.getTitle());
+
+		loginPage.loginAction(username, password);
+		driver.get(baseURL + "/home");
+		WebDriverWait wait = new WebDriverWait(driver, 30);
+		wait.until(driver -> driver.findElement(By.id("nav-notes-tab"))).click();
+		this.credentialTabPage.addNewCredentialAction(driver, url, usernameCredential, passwordCredential);
+
 	}
 
 
