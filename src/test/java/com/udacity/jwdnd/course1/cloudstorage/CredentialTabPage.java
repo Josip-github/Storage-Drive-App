@@ -32,6 +32,9 @@ public class CredentialTabPage {
     @FindBy(id = "credential-url")
     private List<WebElement> urlList;
 
+    @FindBy(id = "credential-password")
+    private List<WebElement> passwordList;
+
     public CredentialTabPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
@@ -49,5 +52,9 @@ public class CredentialTabPage {
 
     public List<WebElement> getUrlList(){
         return this.urlList;
+    }
+
+    public List<WebElement> getPasswordList(){
+        return this.passwordList;
     }
 }

@@ -143,7 +143,7 @@ class CloudStorageApplicationTests {
 		driver.get(baseURL + "/home");
 		wait.until(driver -> driver.findElement(By.id("nav-notes-tab"))).click();
 		assertEquals(sizeOfUrlList + 1, this.credentialTabPage.getUrlList().size());
-
+		assertNotEquals(passwordCredential, this.credentialTabPage.getPasswordList().get(1));
 
 	}
 
