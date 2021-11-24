@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class CredentialController {
 
-    private UserService userService;
-    private CredentialService credentialService;
+    private final UserService userService;
+    private final CredentialService credentialService;
 
     public CredentialController(UserService userService, CredentialService credentialService) {
         this.userService = userService;
