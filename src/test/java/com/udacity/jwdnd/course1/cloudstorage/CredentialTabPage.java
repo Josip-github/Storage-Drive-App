@@ -39,6 +39,9 @@ public class CredentialTabPage {
     @FindBy(id = "credential-username")
     private List<WebElement> usernameList;
 
+    @FindBy(id = "edit-btn-credential")
+    private List<WebElement> editButtonList;
+
     public CredentialTabPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
@@ -75,5 +78,22 @@ public class CredentialTabPage {
                         usernameList.get(index).getText(),
                         passwordList.get(index).getText()));
         return attributesOfCredInstance;
+    }
+
+    public void editCredential(WebDriver driver, int index, String url, String username, String password){
+        WebDriverWait wait = new WebDriverWait(driver, 20);
+        wait.until(ExpectedConditions.elementToBeClickable(navCredentialTab)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(editButtonList.get(index))).click();
+
+        wait.until(ExpectedConditions.elementToBeClickable(urlInputField)).clear();
+        wait.until(ExpectedConditions.elementToBeClickable(urlInputField)).sendKeys(url);
+
+        wait.until(ExpectedConditions.elementToBeClickable(usernameInputField)).clear();
+        wait.until(ExpectedConditions.elementToBeClickable(usernameInputField)).sendKeys(username);
+
+        wait.until(ExpectedConditions.elementToBeClickable(passwordInputField)).clear();
+        wait.until(ExpectedConditions.elementToBeClickable(passwordInputField)).sendKeys(password);
+
+        wait.until(ExpectedConditions.elementToBeClickable(saveChangesButton)).click();
     }
 }

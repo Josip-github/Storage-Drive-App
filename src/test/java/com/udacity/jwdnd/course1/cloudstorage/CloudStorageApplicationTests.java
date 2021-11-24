@@ -155,6 +155,19 @@ class CloudStorageApplicationTests {
 		assertEquals(usernameCredential, detailsOfCredential.get(1));
 		assertNotEquals(passwordCredential, detailsOfCredential.get(2));
 
+		driver.get(baseURL + "/home");
+		wait.until(driver -> driver.findElement(By.id("nav-credentials-tab"))).click();
+		String newUrl = "udemy.com";
+		String newUsername = "udemyUser456";
+		String newPassword = "a1.r3-op().";
+		this.credentialTabPage.editCredential(driver, 0, newUrl, newUsername, newPassword);
+
+		driver.get(baseURL + "/home");
+		detailsOfCredential = credentialTabPage.getAttributesOfCredentialInstance(driver, 0);
+		assertEquals(newUrl, detailsOfCredential.get(0));
+		assertEquals(newUsername, detailsOfCredential.get(1));
+		assertNotEquals(newPassword, detailsOfCredential.get(2));
+
 	}
 
 
