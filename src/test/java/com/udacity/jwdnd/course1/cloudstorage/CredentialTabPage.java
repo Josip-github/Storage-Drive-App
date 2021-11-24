@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -18,13 +19,13 @@ public class CredentialTabPage {
     @FindBy(id = "add-new-credential") // home.html line 134
     private WebElement addNewCredButton;
 
-    @FindBy(id = "credential-url") // home.html line 178
+    @FindBy(id = "cred-url") // home.html line 178
     private WebElement urlInputField;
 
-    @FindBy(id = "credential-username") // home.html line 182
+    @FindBy(id = "cred-username") // home.html line 182
     private WebElement usernameInputField;
 
-    @FindBy(id = "credential-password") // home.html line 186
+    @FindBy(id = "cred-password") // home.html line 186
     private WebElement passwordInputField;
 
     @FindBy(id = "credential-modal-submit") // home.html line 193
@@ -41,6 +42,9 @@ public class CredentialTabPage {
 
     @FindBy(id = "edit-btn-credential")
     private List<WebElement> editButtonList;
+
+    @FindBy(id = "delete-btn-credential")
+    private List<WebElement> deleteButton;
 
     public CredentialTabPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -96,4 +100,10 @@ public class CredentialTabPage {
 
         wait.until(ExpectedConditions.elementToBeClickable(saveChangesButton)).click();
     }
+
+    public void deleteCredentialAction(WebDriver driver){
+        WebDriverWait wait = new WebDriverWait(driver, 30);
+        wait.until(ExpectedConditions.elementToBeClickable(deleteButton.get(0))).click();
+    }
+
 }

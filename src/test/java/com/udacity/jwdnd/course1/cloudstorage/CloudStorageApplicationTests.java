@@ -127,8 +127,8 @@ class CloudStorageApplicationTests {
 		String usernameCredential = "udacityUser123";
 		String passwordCredential = "pass246!word";
 
-		driver.get(baseURL + "/signup");
-		signupPage.signupAction(firstname, lastname, username, password);
+		/*driver.get(baseURL + "/signup");
+		signupPage.signupAction(firstname, lastname, username, password);*/
 
 		driver.get(baseURL + "/login");
 		assertEquals("Login", driver.getTitle());
@@ -155,7 +155,7 @@ class CloudStorageApplicationTests {
 		assertEquals(usernameCredential, detailsOfCredential.get(1));
 		assertNotEquals(passwordCredential, detailsOfCredential.get(2));
 
-		driver.get(baseURL + "/home");
+		/*driver.get(baseURL + "/home");
 		wait.until(driver -> driver.findElement(By.id("nav-credentials-tab"))).click();
 		String newUrl = "udemy.com";
 		String newUsername = "udemyUser456";
@@ -166,8 +166,15 @@ class CloudStorageApplicationTests {
 		detailsOfCredential = credentialTabPage.getAttributesOfCredentialInstance(driver, 0);
 		assertEquals(newUrl, detailsOfCredential.get(0));
 		assertEquals(newUsername, detailsOfCredential.get(1));
-		assertNotEquals(newPassword, detailsOfCredential.get(2));
+		assertNotEquals(newPassword, detailsOfCredential.get(2));*/
 
+		driver.get(baseURL + "/home");
+		wait.until(driver -> driver.findElement(By.id("nav-credentials-tab"))).click();
+		credentialTabPage.deleteCredentialAction(driver);
+
+		driver.get(baseURL + "/home");
+		wait.until(driver -> driver.findElement(By.id("nav-credentials-tab"))).click();
+		assertEquals(0, this.credentialTabPage.getUrlList().size());
 	}
 
 
