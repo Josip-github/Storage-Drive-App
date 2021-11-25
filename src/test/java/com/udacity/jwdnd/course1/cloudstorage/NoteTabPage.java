@@ -111,4 +111,12 @@ public class NoteTabPage {
     public int getSizeOfNoteList(){
         return this.titleList.size();
     }
+
+    public List<WebElement> getTitleList(){
+        return this.titleList;
+    }
+
+    public List<WebElement> getDescriptionList(){
+        return this.descriptionList;
+    }
 }

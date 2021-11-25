@@ -106,4 +106,12 @@ public class CredentialTabPage {
         wait.until(ExpectedConditions.elementToBeClickable(deleteButton.get(0))).click();
     }
 
+    public WebElement getPasswordInputField(){
+        return this.passwordInputField;
+    }
+
+    public List<WebElement> getEditButtonList(){
+        return this.editButtonList;
+    }
+
 }

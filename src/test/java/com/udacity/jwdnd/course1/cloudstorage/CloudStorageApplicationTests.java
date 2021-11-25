@@ -1,18 +1,23 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
+import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.security.core.Authentication;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,6 +40,9 @@ class CloudStorageApplicationTests {
 	private HomePage homePage;
 	private NoteTabPage noteTabPage;
 	private CredentialTabPage credentialTabPage;
+
+	@Autowired
+	private CredentialService credentialService;
 
 	@BeforeAll
 	public static void beforeAll() {
@@ -80,7 +88,7 @@ class CloudStorageApplicationTests {
 		assertEquals(baseURL + "/login", driver.getCurrentUrl());
 
 		driver.get(baseURL + "/home");  // go to the home page again
-		assertNotEquals("Home", driver.getTitle());  // but it fails because driver is unauthorized
+		assertNotEquals("Home", driver.getTitle());  // but it doesn't display the home page because driver is unauthorized
 	}
 
 	@Test
@@ -100,8 +108,11 @@ class CloudStorageApplicationTests {
 		noteTabPage.addNewNoteAction(driver,"Title1", "Description1", noteTab); // driver adds a new note
 
 		driver.get(baseURL + "/home");
+		driver.findElement(By.id("nav-notes-tab")).click();
 		assertEquals("Title1", noteTabPage.getListOfNoteElements(driver).get(0));
 		assertEquals("Description1", noteTabPage.getListOfNoteElements(driver).get(1));
+		assertEquals("Title1", noteTabPage.getTitleList().get(0).getText());
+		assertEquals("Description1", noteTabPage.getDescriptionList().get(0).getText());
 
 		driver.get(baseURL + "/home");
 		driver.findElement(By.id("nav-notes-tab")).click();
@@ -111,6 +122,8 @@ class CloudStorageApplicationTests {
 		List<String> updatedListOfNoteElements = noteTabPage.getListOfNoteElements(driver);
 		assertEquals("Title2", updatedListOfNoteElements.get(0));
 		assertEquals("Description2", updatedListOfNoteElements.get(1));
+		assertEquals("Title2", noteTabPage.getTitleList().get(0).getText());
+		assertEquals("Description2", noteTabPage.getDescriptionList().get(0).getText());
 
 		driver.get(baseURL + "/home");
 		driver.findElement(By.id("nav-notes-tab")).click();
@@ -155,6 +168,29 @@ class CloudStorageApplicationTests {
 		assertEquals(url, detailsOfCredential.get(0));
 		assertEquals(usernameCredential, detailsOfCredential.get(1));
 		assertNotEquals(passwordCredential, detailsOfCredential.get(2));
+		assertEquals(url, credentialTabPage.getUrlList().get(0).getText());
+		assertEquals(usernameCredential, credentialTabPage.getUsernameList().get(0).getText());
+		assertNotEquals(passwordCredential, credentialTabPage.getPasswordList().get(0).getText()); // assertion that this element is not equal to the unencrypted password
+		assertNotNull(credentialTabPage.getPasswordList().get(0).getText()); // assertion that this element is not null
+
+		driver.get(baseURL + "/home");
+		wait.until(driver -> driver.findElement(By.id("nav-credentials-tab"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(credentialTabPage.getEditButtonList().get(0))).click();
+
+		// In the following lines of code driver tests that viewable password
+		// in Credential modal is equal to the original password that was typed in when credential was created
+
+		WebElement passwordInputField = credentialTabPage.getPasswordInputField();
+		wait.until(ExpectedConditions.elementToBeClickable(passwordInputField));
+		String decryptedPassword = (String) ((JavascriptExecutor) driver).executeScript("return arguments[0].value", passwordInputField);
+		String scriptHtml = "return document.getElementById('credential-id').getAttribute('value');";
+		int credentialId = Integer.parseInt( ((JavascriptExecutor) driver).executeScript(scriptHtml).toString());
+		Credential credential = credentialService.getCredentialByItsId(credentialId);
+		String passwordAcquiredfromCredentialId = credentialService.decryptPassword(credential);
+		assertEquals(passwordCredential, decryptedPassword);
+		assertEquals(passwordCredential, passwordAcquiredfromCredentialId);
+
+
 
 		driver.get(baseURL + "/home");
 		wait.until(driver -> driver.findElement(By.id("nav-credentials-tab"))).click();
@@ -169,6 +205,11 @@ class CloudStorageApplicationTests {
 		assertEquals(newUrl, detailsOfCredential.get(0));
 		assertEquals(newUsername, detailsOfCredential.get(1));
 		assertNotEquals(newPassword, detailsOfCredential.get(2));
+		assertEquals(newUrl, credentialTabPage.getUrlList().get(0).getText());
+		assertEquals(newUsername, credentialTabPage.getUsernameList().get(0).getText());
+		assertNotEquals(newPassword, credentialTabPage.getPasswordList().get(0).getText()); // assertion that updated password is encrypted
+		assertNotNull(credentialTabPage.getPasswordList().get(0).getText()); // assertion that this element is not null
+
 
 		driver.get(baseURL + "/home");
 		wait.until(driver -> driver.findElement(By.id("nav-credentials-tab"))).click();
@@ -176,8 +217,11 @@ class CloudStorageApplicationTests {
 
 		driver.get(baseURL + "/home");
 		wait.until(driver -> driver.findElement(By.id("nav-credentials-tab"))).click();
-		assertEquals(0, this.credentialTabPage.getUrlList().size());
+		assertEquals(0, credentialTabPage.getUrlList().size());
+		assertEquals(0, credentialTabPage.getUsernameList().size());
+		assertEquals(0, credentialTabPage.getPasswordList().size());
 	}
+
 
 
 
