@@ -133,14 +133,14 @@ class CloudStorageApplicationTests {
 		driver.get(baseURL + "/login");
 		assertEquals("Login", driver.getTitle());
 
-		loginPage.loginAction(username, password);
+		loginPage.loginAction(username, password); // login
 		driver.get(baseURL + "/home");
 		WebDriverWait wait = new WebDriverWait(driver, 30);
-		wait.until(driver -> driver.findElement(By.id("nav-credentials-tab"))).click();
+		wait.until(driver -> driver.findElement(By.id("nav-credentials-tab"))).click(); // go to the credential tab
 		int sizeOfUrlList = this.credentialTabPage.getUrlList().size();
 		int sizeOfUsernameList = this.credentialTabPage.getUsernameList().size();
 		int sizeOfPasswordList = this.credentialTabPage.getPasswordList().size();
-		this.credentialTabPage.addNewCredentialAction(driver, url, usernameCredential, passwordCredential);
+		this.credentialTabPage.addNewCredentialAction(driver, url, usernameCredential, passwordCredential); // add new credential
 
 		driver.get(baseURL + "/home");
 		wait.until(driver -> driver.findElement(By.id("nav-credentials-tab"))).click();
@@ -155,22 +155,23 @@ class CloudStorageApplicationTests {
 		assertEquals(usernameCredential, detailsOfCredential.get(1));
 		assertNotEquals(passwordCredential, detailsOfCredential.get(2));
 
-		/*driver.get(baseURL + "/home");
+		driver.get(baseURL + "/home");
 		wait.until(driver -> driver.findElement(By.id("nav-credentials-tab"))).click();
 		String newUrl = "udemy.com";
 		String newUsername = "udemyUser456";
 		String newPassword = "a1.r3-op().";
-		this.credentialTabPage.editCredential(driver, 0, newUrl, newUsername, newPassword);
-
-		driver.get(baseURL + "/home");
-		detailsOfCredential = credentialTabPage.getAttributesOfCredentialInstance(driver, 0);
-		assertEquals(newUrl, detailsOfCredential.get(0));
-		assertEquals(newUsername, detailsOfCredential.get(1));
-		assertNotEquals(newPassword, detailsOfCredential.get(2));*/
+		this.credentialTabPage.editCredential(driver, 0, newUrl, newUsername, newPassword); // edit credential
 
 		driver.get(baseURL + "/home");
 		wait.until(driver -> driver.findElement(By.id("nav-credentials-tab"))).click();
-		credentialTabPage.deleteCredentialAction(driver);
+		detailsOfCredential = credentialTabPage.getAttributesOfCredentialInstance(driver, 0);
+		assertEquals(newUrl, detailsOfCredential.get(0));
+		assertEquals(newUsername, detailsOfCredential.get(1));
+		assertNotEquals(newPassword, detailsOfCredential.get(2));
+
+		driver.get(baseURL + "/home");
+		wait.until(driver -> driver.findElement(By.id("nav-credentials-tab"))).click();
+		credentialTabPage.deleteCredentialAction(driver); // delete credential
 
 		driver.get(baseURL + "/home");
 		wait.until(driver -> driver.findElement(By.id("nav-credentials-tab"))).click();
