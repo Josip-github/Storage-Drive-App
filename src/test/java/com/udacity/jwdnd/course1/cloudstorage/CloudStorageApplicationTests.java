@@ -62,24 +62,25 @@ class CloudStorageApplicationTests {
 	@Test
 	@Order(1)
 	public void testValidLoginAndLogout(){
-		driver.get(baseURL + "/signup");
-		assertEquals("Sign Up", driver.getTitle());
 
-		signupPage.signupAction(firstname, lastname, username, password);
-
-		driver.get(baseURL + "/login");
+		driver.get(baseURL + "/login");  // go to the login page
 		assertEquals("Login", driver.getTitle());
 
-		loginPage.loginAction(username, password);
+		driver.get(baseURL + "/signup");  // go to the signup page
+		assertEquals("Sign Up", driver.getTitle());
 
-		driver.get(baseURL + "/home");
+		signupPage.signupAction(firstname, lastname, username, password); // signup action
+
+		loginPage.loginAction(username, password);  // login action
+
+		driver.get(baseURL + "/home");  // go to the home page
 		assertEquals("Home", driver.getTitle());
 
-		homePage.logoutAction();
+		homePage.logoutAction();  // logout action
 		assertEquals(baseURL + "/login", driver.getCurrentUrl());
 
-		driver.get(baseURL + "/home");
-		assertNotEquals("Home", driver.getTitle());
+		driver.get(baseURL + "/home");  // go to the home page again
+		assertNotEquals("Home", driver.getTitle());  // but it fails because driver is unauthorized
 	}
 
 	@Test
